@@ -42,5 +42,7 @@ export const useShopStore = defineStore('shop', {
       const item = state.cart.find((item) => item.id === productId)
       return item ? item.quantity : 0
     },
+    canIncreaseQuantity: () => (item) => item.quantity < item.stock,
+    canDecreaseQuantity: () => (item) => item.quantity > 1,
   },
 })

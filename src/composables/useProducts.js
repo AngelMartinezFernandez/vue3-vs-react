@@ -1,3 +1,5 @@
+// Url de la api: https://api.escuelajs.co/api/v1/products
+
 // Conceptos Vue vs React:
 // - composable === custom hook
 // - ref/reactive === useState
@@ -5,8 +7,10 @@
 // - try/catch === try/catch en useEffect
 
 import { ref, onMounted } from 'vue'
+import mockProducts from '../mocks/products.json'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
+const USE_MOCK = false // Cambiar a true para usar datos mock, las imagenes no se ven en el mock
 
 export function useProducts() {
   const products = ref([])
@@ -18,6 +22,11 @@ export function useProducts() {
     error.value = null
 
     try {
+      if (USE_MOCK) {
+        products.value = mockProducts.products
+        return
+      }
+
       const response = await fetch(`${API_BASE_URL}/products?offset=0&limit=20`)
       const data = await response.json()
 
