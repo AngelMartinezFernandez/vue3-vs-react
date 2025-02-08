@@ -6,6 +6,8 @@
 
 import { ref, onMounted } from 'vue'
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
+
 export function useProducts() {
   const products = ref([])
   const loading = ref(false)
@@ -16,7 +18,7 @@ export function useProducts() {
     error.value = null
 
     try {
-      const response = await fetch('https://api.escuelajs.co/api/v1/products?offset=0&limit=20')
+      const response = await fetch(`${API_BASE_URL}/products?offset=0&limit=20`)
       const data = await response.json()
 
       // Aplicamos patrón mapper para transformar los datos de la API y hacerlos nuestros, definiendo la estructura de los datos que queremos

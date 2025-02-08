@@ -25,6 +25,9 @@ Proyecto de ejemplo para mostrar las similitudes y diferencias entre Vue 3 y Rea
 # Instalar dependencias
 npm install
 
+# Configurar variables de entorno
+cp .env.template .env
+
 # Iniciar servidor de desarrollo
 npm run dev
 
@@ -34,6 +37,16 @@ npm run build
 # Linting
 npm run lint
 ```
+
+## Variables de Entorno
+
+El proyecto usa las siguientes variables de entorno:
+
+```env
+VITE_API_BASE_URL=https://api.escuelajs.co/api/v1  # URL base de la API
+```
+
+> 💡 Copia `.env.template` a `.env` y ajusta los valores según necesites
 
 ## Estructura del Proyecto
 
