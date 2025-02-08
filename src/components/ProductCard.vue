@@ -6,6 +6,7 @@
 // - template === return implícito
 // - scoped CSS === CSS Modules/styled-components
 import { useShopStore } from '../stores/shop'
+import { computed } from 'vue'
 
 const props = defineProps({
   product: {
@@ -16,8 +17,13 @@ const props = defineProps({
 
 const store = useShopStore()
 
+const quantityInCart = computed(() => store.getItemQuantityInCart(props.product.id))
+const isMaxStock = computed(() => quantityInCart.value >= props.product.stock)
+
 const addToCart = () => {
-  store.addToCart(props.product)
+  if (!isMaxStock.value) {
+    store.addToCart(props.product)
+  }
 }
 </script>
 
@@ -31,12 +37,19 @@ const addToCart = () => {
     <h2 class="text-xl font-bold mb-2">{{ product.name }}</h2>
     <p class="text-gray-600 mb-4">€{{ product.price }}</p>
     <div class="flex justify-between items-center">
-      <span class="text-sm text-gray-500">Stock: {{ product.stock }}</span>
+      <span class="text-sm text-gray-500">
+        Stock: {{ product.stock }}
+        <span v-if="quantityInCart" class="ml-1">
+          ({{ quantityInCart }} en carrito)
+        </span>
+      </span>
       <button
         @click="addToCart"
-        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
+        :disabled="isMaxStock"
+        class="bg-blue-500 text-white px-4 py-2 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        :class="{ 'hover:bg-blue-600': !isMaxStock }"
       >
-        Añadir al carrito
+        {{ isMaxStock ? 'Stock máximo' : 'Añadir al carrito' }}
       </button>
     </div>
   </div>

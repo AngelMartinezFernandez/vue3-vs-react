@@ -6,8 +6,17 @@
 // - Store injection === Context consumption
 // - Template refs === useRef
 import { useShopStore } from '../stores/shop'
+import { computed } from 'vue'
 
 const store = useShopStore()
+
+const canIncreaseQuantity = (item) => {
+  return item.quantity < item.stock
+}
+
+const canDecreaseQuantity = (item) => {
+  return item.quantity > 1
+}
 
 const updateQuantity = (item, newQuantity) => {
   if (newQuantity > 0 && newQuantity <= item.stock) {
@@ -39,14 +48,18 @@ const updateQuantity = (item, newQuantity) => {
           <div class="flex items-center gap-2">
             <button
               @click="updateQuantity(item, item.quantity - 1)"
-              class="px-2 py-1 bg-gray-100 rounded hover:bg-gray-200"
+              :disabled="!canDecreaseQuantity(item)"
+              class="px-2 py-1 bg-gray-100 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              :class="{ 'hover:bg-gray-200': canDecreaseQuantity(item) }"
             >
               -
             </button>
             <span class="w-8 text-center">{{ item.quantity }}</span>
             <button
               @click="updateQuantity(item, item.quantity + 1)"
-              class="px-2 py-1 bg-gray-100 rounded hover:bg-gray-200"
+              :disabled="!canIncreaseQuantity(item)"
+              class="px-2 py-1 bg-gray-100 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              :class="{ 'hover:bg-gray-200': canIncreaseQuantity(item) }"
             >
               +
             </button>
